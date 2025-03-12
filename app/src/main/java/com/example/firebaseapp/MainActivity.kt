@@ -31,73 +31,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.firebaseapp.navigation.Screen
+import com.example.firebaseapp.screen.LoginScreen
+import com.example.firebaseapp.screen.RegisterScreen
 import com.example.firebaseapp.ui.theme.FirebaseAppTheme
 import com.example.firebaseapp.widget.CustomTextField
 
+@Composable
+fun NavGraph(navController: NavHostController) {
+    val authViewModel: AuthViewModel = viewModel()
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Login.route
+    ) {
+        composable(Screen.Login.route) {
+            LoginScreen(authViewModel, navController)
+        }
+        composable(Screen.Register.route) {
+            RegisterScreen(authViewModel, navController)
+        }
+    }
+}
+
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FirebaseAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen(AuthViewModel())
-                }
+            setContent {
+                val navController = rememberNavController()
+                NavGraph(navController)
             }
         }
     }
 }
 
-@Composable
-fun LoginScreen(viewModel: AuthViewModel) {
-    val state by viewModel.uiState.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CustomTextField(
-            value = state.email,
-            onValueChange = { viewModel.onEmailChange(it) },
-            label = "Email",
-            leadingIcon = Icons.Default.Email,
-            errorMessage = if (state.email.isEmpty()) "Email required" else null
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CustomTextField(
-            value = state.password,
-            onValueChange = { viewModel.onPasswordChange(it) },
-            label = "Password",
-            isPassword = true,
-            leadingIcon = Icons.Default.Lock,
-            errorMessage = if (state.password.length < 6) "Min 6 characters" else null
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { viewModel.login() },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !state.isLoading
-        ) {
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp))
-            } else {
-                Text("Login")
-            }
-        }
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CustomTextFieldPreview() {
-    MaterialTheme {
-        LoginScreen(AuthViewModel())
-    }
-}
