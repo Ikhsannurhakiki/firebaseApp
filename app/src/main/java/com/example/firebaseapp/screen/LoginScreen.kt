@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.firebaseapp.data.UserPreferences
 import com.example.firebaseapp.navigation.Screen
 import com.example.firebaseapp.widget.CustomTextField
 
@@ -96,9 +97,9 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun CustomTextFieldPreview() {
-    val fakeNavController = rememberNavController()
-    val fakeViewModel = AuthViewModel()
-    MaterialTheme {
-        LoginScreen(fakeViewModel, fakeNavController)
-    }
+//    val fakeNavController = rememberNavController()
+//    val fakeViewModel = AuthViewModel(pref)
+//    MaterialTheme {
+//        LoginScreen(fakeViewModel, fakeNavController)
+//    }
 }

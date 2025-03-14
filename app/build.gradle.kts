@@ -40,6 +40,10 @@ android {
     }
 }
 
+configurations.all {
+    exclude(group = "com.google.android.gms", module = "play-services-ads")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -53,12 +57,15 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.foundation.lint)
+    implementation(libs.androidx.datastore.core.android)
+    implementation(libs.mediation.test.suite)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
@@ -76,4 +83,5 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.datastore.preferences)
 }
