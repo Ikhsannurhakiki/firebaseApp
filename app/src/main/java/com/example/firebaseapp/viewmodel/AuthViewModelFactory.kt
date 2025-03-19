@@ -5,8 +5,10 @@ import com.example.firebaseapp.data.UserPreferences
 
 class AuthViewModelFactory(private val pref: UserPreferences,private val authRepository: AuthRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-            return AuthViewModel(pref, authRepository) as T
+        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
+            return RegisterViewModel(pref, authRepository) as T
+        }else if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            return LoginViewModel(pref, authRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

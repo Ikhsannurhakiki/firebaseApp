@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.foundation.lint)
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.mediation.test.suite)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

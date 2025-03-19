@@ -4,15 +4,25 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.firebaseapp.data.AuthRepository
 import com.example.firebaseapp.data.UserPreferences
-import com.example.firebaseapp.data.state.AuthState
+import com.example.firebaseapp.data.state.LoginState
+import com.example.firebaseapp.data.state.RegisterState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val pref: UserPreferences, private val authRepository: AuthRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow(AuthState())
-    val uiState: StateFlow<AuthState> = _uiState
+class RegisterViewModel(private val pref: UserPreferences, private val authRepository: AuthRepository) :
+    ViewModel() {
+    private val _uiState = MutableStateFlow(RegisterState())
+    val uiState: StateFlow<RegisterState> = _uiState
+
+    fun showSnackbar(message: String) {
+        _uiState.value = _uiState.value.copy(snackbarMessage = message)
+    }
+
+    fun clearSnackbarMessage() {
+        _uiState.value = _uiState.value.copy(snackbarMessage = null)
+    }
 
     fun onUsernameChange(username: String) {
         _uiState.value = _uiState.value.copy(username = username)
@@ -44,28 +54,6 @@ class AuthViewModel(private val pref: UserPreferences, private val authRepositor
         }
     }
 
-    fun onForgotPasswordClicked() {
-
-    }
-
-    fun getSession() {
-
-    }
-
-    fun login() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        viewModelScope.launch {
-            delay(2000) // Simulate API call
-            _uiState.value =
-                if (_uiState.value.email == "user@example.com" && _uiState.value.password == "password") {
-                    _uiState.value.copy(isLoading = false, isSuccess = true)
-                } else {
-                    _uiState.value.copy(isLoading = false, snackbarMessage = "Invalid credentials")
-                }
-        }
-    }
-
     fun register() {
         _uiState.value = _uiState.value.copy(isLoading = true)
         val errors = mapOf(
@@ -87,11 +75,16 @@ class AuthViewModel(private val pref: UserPreferences, private val authRepositor
             viewModelScope.launch {
                 delay(2000)
                 _uiState.value = _uiState.value.copy(isLoading = false)
-                var result = authRepository.registerUser(_uiState.value.username, _uiState.value.email, _uiState.value.password)
+                var result = authRepository.registerUser(
+                    _uiState.value.username,
+                    _uiState.value.email,
+                    _uiState.value.password
+                )
                 if (result.isSuccess) {
                     try {
-                        saveUserId(_uiState.value.email)
-                    }catch (e: Exception){
+                        pref.saveUserId(_uiState.value.email)
+                        _uiState.value = _uiState.value.copy(isSuccess = true)
+                    } catch (e: Exception) {
                         println(e)
                     }
                 }
@@ -100,17 +93,6 @@ class AuthViewModel(private val pref: UserPreferences, private val authRepositor
             _uiState.value = _uiState.value.copy(isLoading = false)
             _uiState.value = _uiState.value.copy(snackbarMessage = "Please check your input")
         }
-    }
-
-    fun getUserId(): LiveData<String?> {
-        return pref.getUserId().asLiveData()
-    }
-
-    fun saveUserId(userId: String) {
-        viewModelScope.launch {
-            pref.saveUserId(userId)
-        }
-
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.firebaseapp.data
+package com.example.firebaseapp.data.remote
 
 data class AuthUser(
     var userId: String?,

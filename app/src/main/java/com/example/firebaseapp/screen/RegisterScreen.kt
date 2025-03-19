@@ -1,6 +1,6 @@
 package com.example.firebaseapp.screen
 
-import AuthViewModel
+import RegisterViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +25,7 @@ import androidx.navigation.NavHostController
 import com.example.firebaseapp.widget.CustomTextField
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel, navHostController: NavHostController) {
+fun RegisterScreen(viewModel: RegisterViewModel, navHostController: NavHostController) {
     val state by viewModel.uiState.collectAsState()
 
     Column(

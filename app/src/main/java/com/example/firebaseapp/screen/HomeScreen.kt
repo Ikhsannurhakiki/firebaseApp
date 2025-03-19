@@ -1,21 +1,27 @@
 package com.example.firebaseapp.screen
 
-import AuthViewModel
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
-import com.example.firebaseapp.data.UserPreferences
-import com.example.firebaseapp.data.dataStore
-import com.example.firebaseapp.viewmodel.MainViewModel
-import com.google.android.ads.mediationtestsuite.viewmodels.ViewModelFactory
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel, navController: NavHostController) {
-
-    Column {
-        Text("Hallo")
+fun HomeScreen() {
+    Scaffold { paddingValues ->
+        Column(
+            Modifier
+                .padding(paddingValues)
+                .padding(
+                    16.dp
+                )
+        ) {
+            Column {
+                Text("Hallo")
+            }
+        }
     }
+
 }
