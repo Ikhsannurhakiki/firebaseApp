@@ -2,6 +2,7 @@ package com.example.firebaseapp
 
 import AuthViewModelFactory
 import LoginViewModel
+import MainViewModelFactory
 import RegisterViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,16 +23,21 @@ import com.example.firebaseapp.navigation.Screen
 import com.example.firebaseapp.screen.HomeScreen
 import com.example.firebaseapp.screen.LoginScreen
 import com.example.firebaseapp.screen.RegisterScreen
+import com.example.firebaseapp.viewmodel.ChatViewModel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ikhsannurhakiki.aplikasiforum.utils.AppExecutors
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     val context = LocalContext.current
     val appExecutors = remember { AppExecutors() }
-    val authRepository = remember { AuthRepository.getInstance(FirebaseAuth.getInstance()) }
+    val firestore = remember { FirebaseFirestore.getInstance() }
+    val authRepository = remember { AuthRepository.getInstance(FirebaseAuth.getInstance(), firestore) }
     val registerViewModel: RegisterViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
     val loginViewModel: LoginViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
+    val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory())
 
     NavHost(
         navController = navController,
@@ -39,7 +45,7 @@ fun NavGraph(navController: NavHostController) {
     ) {
 
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(chatViewModel)
         }
 
         composable(Screen.Login.route) {
@@ -55,6 +61,7 @@ fun NavGraph(navController: NavHostController) {
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         enableEdgeToEdge()
         setContent {
             setContent {

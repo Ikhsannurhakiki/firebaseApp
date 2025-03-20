@@ -68,6 +68,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.coil.compose)
+    implementation(libs.firebase.database)
+
+    implementation(libs.firebase.ui.database)
+    implementation(libs.glide)
 
 
     // Coroutines
