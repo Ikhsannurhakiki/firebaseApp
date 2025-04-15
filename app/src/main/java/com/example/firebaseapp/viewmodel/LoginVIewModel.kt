@@ -42,9 +42,7 @@ class LoginViewModel(private val pref: UserPreferences, private val authReposito
 
     }
 
-    fun getSession() {
 
-    }
 
     fun login() {
         _uiState.value = _uiState.value.copy(isLoading = true)
@@ -74,18 +72,6 @@ class LoginViewModel(private val pref: UserPreferences, private val authReposito
             _uiState.value = _uiState.value.copy(isLoading = false)
            showSnackbar("Please check your input")
         }
-    }
-
-
-    fun getUserId(): LiveData<String?> {
-        return pref.getUserId().asLiveData()
-    }
-
-    fun saveUserId(userId: String) {
-        viewModelScope.launch {
-            pref.saveUserId(userId)
-        }
-
     }
 }
 

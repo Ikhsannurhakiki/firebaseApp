@@ -1,4 +1,4 @@
-package com.example.firebaseapp.screen.widget
+package com.example.firebaseapp.widget
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.firebaseapp.data.enitity.User
 
@@ -36,11 +39,11 @@ fun UserItem(user: User, onClick: (User) -> Unit) {
                 .clip(CircleShape)
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(4.dp))
 
         Column {
-            Text(text = user.name, fontWeight = FontWeight.Bold)
-            Text(text = "Last online: ${user.lastOnline?.toDate()}")
+            Text(text = user.name,
+                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
         }
     }
 }

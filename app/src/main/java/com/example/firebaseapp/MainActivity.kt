@@ -20,10 +20,18 @@ import com.example.firebaseapp.data.AuthRepository
 import com.example.firebaseapp.data.UserPreferences
 import com.example.firebaseapp.data.dataStore
 import com.example.firebaseapp.navigation.Screen
+import com.example.firebaseapp.navigation.authNavGraph
+import com.example.firebaseapp.navigation.mainNavGraph
 import com.example.firebaseapp.screen.HomeScreen
 import com.example.firebaseapp.screen.LoginScreen
+import com.example.firebaseapp.screen.MainScreen
 import com.example.firebaseapp.screen.RegisterScreen
+import com.example.firebaseapp.screen.SettingsScreen
+import com.example.firebaseapp.screen.SplashScreen
 import com.example.firebaseapp.viewmodel.ChatViewModel
+import com.example.firebaseapp.viewmodel.SettingsViewModel
+import com.example.firebaseapp.viewmodel.SettingsViewModelFactory
+import com.example.firebaseapp.viewmodel.SplashViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,14 +46,23 @@ fun NavGraph(navController: NavHostController) {
     val registerViewModel: RegisterViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
     val loginViewModel: LoginViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
     val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory())
+    val splashViewModel: SplashViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
+    val settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(UserPreferences.getInstance(context.dataStore)))
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
+        startDestination = Screen.Splash.route
     ) {
 
+//        authNavGraph(navController, splashViewModel, registerViewModel, loginViewModel)
+//        mainNavGraph(navController, chatViewModel, settingsViewModel)
+
+        composable(Screen.Splash.route){
+            SplashScreen(splashViewModel, navController)
+        }
+
         composable(Screen.Home.route) {
-            HomeScreen(chatViewModel)
+            HomeScreen(chatViewModel, navController)
         }
 
         composable(Screen.Login.route) {
@@ -54,6 +71,18 @@ fun NavGraph(navController: NavHostController) {
 
         composable(Screen.Register.route) {
             RegisterScreen(registerViewModel, navController)
+        }
+
+        composable(Screen.MainScreen.route) {
+            MainScreen(navController)
+        }
+
+        composable(Screen.Settings.route){
+            SettingsScreen(settingsViewModel, navController)
+        }
+
+        composable(Screen.MainScreen.route){
+            MainScreen(navController)
         }
     }
 }
@@ -64,10 +93,9 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         enableEdgeToEdge()
         setContent {
-            setContent {
                 val navController = rememberNavController()
                 NavGraph(navController)
-            }
+
         }
     }
 }

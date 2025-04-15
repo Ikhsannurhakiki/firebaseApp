@@ -109,7 +109,9 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavHostController) {
                 }
                 if (state.isSuccess) {
                     println("Success")
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.MainScreen.route) { inclusive = true } // Remove login from backstack
+                    }
                 }
             }
 
