@@ -1,5 +1,6 @@
 package com.example.firebaseapp.screen
 
+import AuthViewModelFactory
 import MainViewModelFactory
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import com.example.firebaseapp.data.UserPreferences
 import com.example.firebaseapp.data.dataStore
 import com.example.firebaseapp.navigation.Screen
 import com.example.firebaseapp.viewmodel.ChatViewModel
+import com.example.firebaseapp.viewmodel.ProfileViewModel
 import com.example.firebaseapp.viewmodel.SettingsViewModel
 import com.example.firebaseapp.viewmodel.SettingsViewModelFactory
 import com.example.firebaseapp.widget.BottomBar
@@ -33,10 +35,12 @@ fun MainScreen(
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = currentRoute in listOf("home/{user}", "settings", "profile")
     val context = LocalContext.current
-    val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory())
+    val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory(UserPreferences.getInstance(context.dataStore)))
     val settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(
         UserPreferences.getInstance(context.dataStore))
     )
+    val profileViewModel: ProfileViewModel = viewModel(factory = MainViewModelFactory(UserPreferences.getInstance(context.dataStore)))
+
     Scaffold(
         bottomBar = {
             Log.d("current", currentRoute.toString())
@@ -61,7 +65,7 @@ fun MainScreen(
                 }
 
                 composable(Screen.Profile.route) {
-                    SettingsScreen(settingsViewModel, navController)
+                    ProfileScreen (profileViewModel, navController)
                 }
             }
         }

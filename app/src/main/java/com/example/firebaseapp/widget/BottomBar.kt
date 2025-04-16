@@ -36,7 +36,7 @@ fun BottomBar(
             NavigationItem(
                 title = stringResource(R.string.profile),
                 icon = Icons.Default.Person,
-                screen = Screen.Settings
+                screen = Screen.Profile
             ),
         )
 

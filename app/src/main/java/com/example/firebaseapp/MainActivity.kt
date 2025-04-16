@@ -20,15 +20,15 @@ import com.example.firebaseapp.data.AuthRepository
 import com.example.firebaseapp.data.UserPreferences
 import com.example.firebaseapp.data.dataStore
 import com.example.firebaseapp.navigation.Screen
-import com.example.firebaseapp.navigation.authNavGraph
-import com.example.firebaseapp.navigation.mainNavGraph
 import com.example.firebaseapp.screen.HomeScreen
 import com.example.firebaseapp.screen.LoginScreen
 import com.example.firebaseapp.screen.MainScreen
+import com.example.firebaseapp.screen.ProfileScreen
 import com.example.firebaseapp.screen.RegisterScreen
 import com.example.firebaseapp.screen.SettingsScreen
 import com.example.firebaseapp.screen.SplashScreen
 import com.example.firebaseapp.viewmodel.ChatViewModel
+import com.example.firebaseapp.viewmodel.ProfileViewModel
 import com.example.firebaseapp.viewmodel.SettingsViewModel
 import com.example.firebaseapp.viewmodel.SettingsViewModelFactory
 import com.example.firebaseapp.viewmodel.SplashViewModel
@@ -45,9 +45,10 @@ fun NavGraph(navController: NavHostController) {
     val authRepository = remember { AuthRepository.getInstance(FirebaseAuth.getInstance(), firestore) }
     val registerViewModel: RegisterViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
     val loginViewModel: LoginViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
-    val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory())
+    val chatViewModel: ChatViewModel = viewModel(factory = MainViewModelFactory(UserPreferences.getInstance(context.dataStore)))
     val splashViewModel: SplashViewModel = viewModel(factory = AuthViewModelFactory(UserPreferences.getInstance(context.dataStore), authRepository))
     val settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModelFactory(UserPreferences.getInstance(context.dataStore)))
+    val profileViewModel: ProfileViewModel =  viewModel(factory = MainViewModelFactory(UserPreferences.getInstance(context.dataStore)))
 
     NavHost(
         navController = navController,
@@ -83,6 +84,10 @@ fun NavGraph(navController: NavHostController) {
 
         composable(Screen.MainScreen.route){
             MainScreen(navController)
+        }
+
+        composable(Screen.Profile.route){
+            ProfileScreen (profileViewModel, navController)
         }
     }
 }
